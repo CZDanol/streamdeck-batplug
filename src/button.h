@@ -19,16 +19,12 @@ public:
 public:
 	Button(const CtorData &d);
 
-	virtual ~Button() {}
-
 public:
-	virtual void onPressed() {}
-	virtual void onReleased() {}
-
-	virtual void update() {}
+	void onPressed();
 
 public:
 	Device &device;
+	const QString action;
 	const QString context;
 	const QJsonObject payload;
 

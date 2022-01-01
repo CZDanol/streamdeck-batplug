@@ -5,7 +5,6 @@
 #include <QSharedPointer>
 
 #include <qtstreamdeck/qstreamdeckplugin.h>
-#include <qtdiscordipc/qdiscord.h>
 
 #include "device.h"
 
@@ -23,11 +22,7 @@ public:
 	bool init(const ESDConfig &esdConfig);
 
 public:
-	void subscribeVoiceEvents(const QString &channelId);
-
-public:
 	QStreamDeckPlugin deck;
-	QDiscord discord;
 
 private:
 	QHash<QString, QSharedPointer<Device>> devices_;

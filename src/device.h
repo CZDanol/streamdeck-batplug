@@ -13,9 +13,6 @@ class Button;
 class Device {
 
 public:
-	using UserIx = int;
-
-public:
 	Device(Plugin &plugin, const QString &deviceID);
 	~Device();
 
@@ -23,12 +20,6 @@ public:
 	void onAppear(const QStreamDeckAction &action);
 	void onDisappear(const QStreamDeckAction &action);
 	void onSendToPlugin(const QStreamDeckAction &action);
-	void onDiscordMessage(const QJsonObject &msg);
-
-public:
-	void updateData();
-	void updateAllButtons();
-	void updateUserRelatedButtons(UserIx userIx);
 
 public:
 	Plugin &plugin;
@@ -36,11 +27,6 @@ public:
 
 public:
 	QHash<QString, Button*> buttons;
-	QMultiHash<UserIx, Button*> userRelatedButtons;
-	QMap<QString, VoiceState> voiceStates;
-
-	/// Used in pagination
-	int userIxOffset = 0;
 
 };
 

@@ -17,7 +17,7 @@ find_package(Qt6 COMPONENTS Core WebSockets Network Gui REQUIRED CONFIG)
 set(CMAKE_AUTOMOC ON)
 
 set(target_directory "${PROJECT_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE}")
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${target_directory}")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${target_directory}/bin")
 
 qt_add_executable(${target})
 target_link_libraries(${target} PRIVATE Qt6::WebSockets Qt6::Network Qt6::Gui)
