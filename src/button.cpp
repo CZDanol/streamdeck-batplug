@@ -4,16 +4,16 @@
 #include <QCoreApplication>
 #include <QDir>
 
-Button::Button(const CtorData &d) : device(*d.device), action(d.action), context(d.context), payload(d.payload) {
+Button::Button(const CtorData &d) : device(*d.device) {
 
 }
 
-void Button::onPressed() {
+void Button::onPressed(const QStreamDeckAction &a) {
 	QProcess *p = new QProcess(&device.plugin);
 
 	// Find launchable
 	{
-		const QString base = QDir(QCoreApplication::applicationDirPath()).absoluteFilePath("../cmd/" + action);
+		const QString base = QDir(QCoreApplication::applicationDirPath()).absoluteFilePath("../cmd/" + a.action);
 		QString program;
 
 		static const QStringList suffixes {".exe", ".bat", ""};
@@ -33,7 +33,7 @@ void Button::onPressed() {
 	// Set arguments
 	{
 		QStringList args;
-		const QJsonObject settings = payload["settings"].toObject();
+		const QJsonObject settings = a.payload["settings"].toObject();
 		for(auto it = settings.begin(), end = settings.end(); it != end; it++)
 			args << ("--" + it.key()) << it.value().toString();
 
@@ -46,7 +46,7 @@ void Button::onPressed() {
 		qDebug() << "state" << s;
 	});
 
-	QObject::connect(p, &QProcess::readyRead, p, [p, plugin = &device.plugin, ctx = context, device = device.deviceID] {
+	QObject::connect(p, &QProcess::readyRead, p, [p, plugin = &device.plugin, ctx = a.context, device = device.deviceID] {
 		while(p->bytesAvailable()) {
 			const QString ln = QString::fromUtf8(p->readLine()).trimmed();
 			qDebug() << "read" << ln;

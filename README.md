@@ -25,17 +25,20 @@ The plugin core reads `stdout` of the launched commands and reads commands from 
 If you're writing a bat file, you fan for example do
 `echo setTitle This is a new title.`
 
-### `setTitle Title text`
+#### `setTitle Title text`
 Sets the title of the button to a spefixied string.
 
-### `setState ix`
+#### `setState ix`
 Sets the state of the button to a given value (integer).
 
-### `switchProfile profileName`
+#### `switchProfile profileName`
 Switches the stream deck the button is on to a given profile (same limitations as in the stream deck plugin api appy - the profile has to be added by the plugin itself).
 
-### `showAlert`
+#### `showAlert`
 Shows an alert icon over the button.
+
+## Action settings
+* The plugin core passes all action settings as `--key value` argument pairs into the launched application.
 
 ## Authors
 * Idea by Krabs

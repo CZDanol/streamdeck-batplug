@@ -17,7 +17,6 @@ public:
 public:
 	void onAppear(const QStreamDeckAction &action);
 	void onDisappear(const QStreamDeckAction &action);
-	void onSendToPlugin(const QStreamDeckAction &action);
 
 public:
 	Plugin &plugin;

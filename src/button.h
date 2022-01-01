@@ -20,13 +20,10 @@ public:
 	Button(const CtorData &d);
 
 public:
-	void onPressed();
+	void onPressed(const QStreamDeckAction &a);
 
 public:
 	Device &device;
-	const QString action;
-	const QString context;
-	const QJsonObject payload;
 
 };
 

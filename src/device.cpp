@@ -25,21 +25,3 @@ void Device::onAppear(const QStreamDeckAction &action) {
 void Device::onDisappear(const QStreamDeckAction &action) {
 	delete buttons.take(action.context);
 }
-
-void Device::onSendToPlugin(const QStreamDeckAction &action) {
-	// Basically recreate the button
-	Button *btn = buttons.take(action.context);
-	if(!btn)
-		return;
-
-	Button::CtorData d{this, action.action, action.context, btn->payload};
-	QJsonObject s = d.payload["settings"].toObject();
-
-	for(auto it = action.payload.begin(), end = action.payload.end(); it != end; it++)
-		s[it.key()] = it.value();
-
-	d.payload["settings"] = s;
-	createButton(this, d);
-
-	delete btn;
-}
