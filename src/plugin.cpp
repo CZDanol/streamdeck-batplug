@@ -1,35 +1,79 @@
 #include "plugin.h"
 
-#include "button.h"
+#include <QProcess>
+#include <QDir>
+#include <QCoreApplication>
 
 bool Plugin::init(const ESDConfig &esdConfig) {
-	// Init Stream Deck
-	{
-		deck.init(esdConfig.port, esdConfig.pluginUUID, esdConfig.registerEvent, esdConfig.info);
-		if(!deck.connect())
-			return false;
+	deck.init(esdConfig.port, esdConfig.pluginUUID, esdConfig.registerEvent, esdConfig.info);
+	if(!deck.connect())
+		return false;
 
-		connect(&deck, &QStreamDeckPlugin::deviceDidConnect, this, [this](const QString &deviceID) {
-			devices_[deviceID].reset(new Device(*this, deviceID));
-		});
-		connect(&deck, &QStreamDeckPlugin::deviceDidDisconnect, this, [this](const QString &deviceID) {
-			devices_.remove(deviceID);
+	connect(&deck, &QStreamDeckPlugin::keyDown, this, [this](const QStreamDeckAction &a) {
+		QProcess *p = new QProcess(this);
+
+		// Find launchable
+		{
+			const QString base = QDir(QCoreApplication::applicationDirPath()).absoluteFilePath("../cmd/" + a.action);
+			QString program;
+
+			static const QStringList suffixes{".exe", ".bat", ""};
+			for(const QString &suffix: suffixes) {
+				if(const QString f = base + suffix; QFile::exists(f)) {
+					p->setProgram(f);
+					break;
+				}
+			}
+
+			if(p->program().isEmpty()) {
+				qDebug() << "Could not found" << base;
+				return;
+			}
+		}
+
+		// Set arguments
+		{
+			QStringList args;
+			const QJsonObject settings = a.payload["settings"].toObject();
+			for(auto it = settings.begin(), end = settings.end(); it != end; it++)
+				args << ("--" + it.key()) << it.value().toString();
+
+			p->setArguments(args);
+		}
+
+		QObject::connect(p, &QProcess::finished, p, &QProcess::deleteLater);
+		QObject::connect(p, &QProcess::errorOccurred, p, &QProcess::deleteLater);
+		QObject::connect(p, &QProcess::stateChanged, p, [p](QProcess::ProcessState s) {
+			qDebug() << "state" << s;
 		});
 
-		connect(&deck, &QStreamDeckPlugin::willAppear, this, [this](const QStreamDeckAction &action) {
-			contextDevices_[action.context] = action.deviceId;
-			devices_[action.deviceId]->onAppear(action);
-		});
-		connect(&deck, &QStreamDeckPlugin::willDisappear, this, [this](const QStreamDeckAction &action) {
-			devices_[action.deviceId]->onDisappear(action);
-			contextDevices_.remove(action.context);
+		QObject::connect(p, &QProcess::readyRead, p, [p, this, ctx = a.context, device = a.deviceId] {
+			while(p->bytesAvailable()) {
+				const QString ln = QString::fromUtf8(p->readLine()).trimmed();
+				qDebug() << "read" << ln;
+
+				const QString cmd = ln.section(' ', 0, 0);
+
+				QString arg = ln.section(' ', 1);
+				arg.replace("\\n", "\n");
+
+				if(cmd == "setTitle")
+					deck.setTitle(arg, ctx, kESDSDKTarget_HardwareAndSoftware);
+
+				else if(cmd == "setState")
+					deck.setState(arg.toInt(), ctx);
+
+				else if(cmd == "switchProfile")
+					deck.switchProfile(device, arg);
+
+				else if(cmd == "showAlert")
+					deck.showAlert(ctx);
+			}
 		});
 
-		connect(&deck, &QStreamDeckPlugin::keyDown, this, [this](const QStreamDeckAction &action) {
-			if(auto btn = devices_[action.deviceId]->buttons.value(action.context))
-				btn->onPressed(action);
-		});
-	}
+		qDebug() << "run" << p->program() << p->arguments();
+		p->start();
+	});
 
 	return true;
 }

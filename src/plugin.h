@@ -6,8 +6,6 @@
 
 #include <qtstreamdeck/qstreamdeckplugin.h>
 
-#include "device.h"
-
 struct ESDConfig {
 	int port;
 	QString pluginUUID;
@@ -24,10 +22,4 @@ public:
 public:
 	QStreamDeckPlugin deck;
 
-private:
-	QHash<QString, QSharedPointer<Device>> devices_;
-	QHash<QString, QString> contextDevices_; /// Map context -> deviceID
-
 };
-
-extern Plugin *plugin;
