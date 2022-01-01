@@ -1,0 +1,34 @@
+{
+  "Actions": [
+    {
+      "Icon": "noicon",
+      "Name": "TEST",
+      "States": [
+        {
+          "Image": "noicon"
+        }
+      ],
+      "Tooltip": "TATATAT",
+      "UUID": "test.test"
+    }
+  ],
+  "SDKVersion": 2,
+  "Author": "Danol",
+  "CodePathWin": "bin/streamdeck-batplug.exe",
+  "Description": "XAEEX",
+  "Category": "DanolTEST",
+  "CategoryIcon": "",
+  "Name": "DanolTest",
+  "Icon": "noicon",
+  "URL": "",
+  "Version": "1.0.0.0",
+  "OS": [
+    {
+      "Platform": "windows",
+      "MinimumVersion": "10"
+    }
+  ],
+  "Software": {
+    "MinimumVersion": "4.1"
+  }
+}

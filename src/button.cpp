@@ -52,7 +52,9 @@ void Button::onPressed() {
 			qDebug() << "read" << ln;
 
 			const QString cmd = ln.section(' ', 0, 0);
-			const QString arg = ln.section(' ', 1);
+
+			QString arg = ln.section(' ', 1);
+			arg.replace("\\n", "\n");
 
 			if(cmd == "setTitle")
 				plugin->deck.setTitle(arg, ctx, kESDSDKTarget_HardwareAndSoftware);
