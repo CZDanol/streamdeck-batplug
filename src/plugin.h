@@ -19,6 +19,9 @@ class Plugin : public QObject {
 public:
 	bool init(const ESDConfig &esdConfig);
 
+public slots:
+	void onKeyDown(const QStreamDeckAction &a);
+
 public:
 	QStreamDeckPlugin deck;
 
