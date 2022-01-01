@@ -13,14 +13,14 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(target streamdeck-batplug)
 
 # Qt setup
-find_package(Qt6 COMPONENTS Core WebSockets Network Gui REQUIRED CONFIG)
+find_package(Qt6 COMPONENTS Core WebSockets Network REQUIRED CONFIG)
 set(CMAKE_AUTOMOC ON)
 
 set(target_directory "${PROJECT_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE}")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${target_directory}/bin")
 
 qt_add_executable(${target})
-target_link_libraries(${target} PRIVATE Qt6::WebSockets Qt6::Network Qt6::Gui)
+target_link_libraries(${target} PRIVATE Qt6::WebSockets Qt6::Network)
 target_compile_definitions(${target} PRIVATE QT_DISABLE_DEPRECATED_BEFORE=0x060200)
 
 # ===========================================
@@ -40,9 +40,6 @@ target_include_directories(${target} PRIVATE "${PROJECT_SOURCE_DIR}/deps/qtstrea
 # ===========================================
 # Deployment
 # ===========================================
-
-# Copy files from dist
-install(DIRECTORY "${PROJECT_SOURCE_DIR}/dist/" DESTINATION ${target_directory})
 
 # Run windeployqt
 get_target_property(QMAKE_FILEPATH Qt6::qmake IMPORTED_LOCATION)

@@ -9,6 +9,13 @@ bool Plugin::init(const ESDConfig &esdConfig) {
 		if(!deck.connect())
 			return false;
 
+		connect(&deck, &QStreamDeckPlugin::deviceDidConnect, this, [this](const QString &deviceID) {
+			devices_[deviceID].reset(new Device(*this, deviceID));
+		});
+		connect(&deck, &QStreamDeckPlugin::deviceDidDisconnect, this, [this](const QString &deviceID) {
+			devices_.remove(deviceID);
+		});
+
 		connect(&deck, &QStreamDeckPlugin::willAppear, this, [this](const QStreamDeckAction &action) {
 			contextDevices_[action.context] = action.deviceId;
 			devices_[action.deviceId]->onAppear(action);

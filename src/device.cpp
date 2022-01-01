@@ -7,7 +7,6 @@
 Button *createButton(Device *dev, const Button::CtorData &d) {
 	Button *btn = new Button(d);
 	dev->buttons[d.context] = btn;
-
 	return btn;
 }
 
