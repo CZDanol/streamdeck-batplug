@@ -17,9 +17,25 @@ Additionally, it provides a few basic commands that can be executed from the lau
 6. Profit.
 
 ## Supported commands
-The plugin core reads `stdout` of the launched commands and reads commands from that. A command always starts on a new line, trailing and leading withespaces are trimmed.
+The plugin core reads `stdout` of the launched commands and reads commands from that.
+* A command always starts on a new line, trailing and leading withespaces are trimmed.
+* First word on the line is interpreted as a command, the rest of the line after the space is considered to be an argument.
+* `\n` in the text is interpreted as newline.
 
-`
+If you're writing a bat file, you fan for example do
+`echo setTitle This is a new title.`
+
+### `setTitle Title text`
+Sets the title of the button to a spefixied string.
+
+### `setState ix`
+Sets the state of the button to a given value (integer).
+
+### `switchProfile profileName`
+Switches the stream deck the button is on to a given profile (same limitations as in the stream deck plugin api appy - the profile has to be added by the plugin itself).
+
+### `showAlert`
+Shows an alert icon over the button.
 
 ## Authors
 * Idea by Krabs
