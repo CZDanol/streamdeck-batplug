@@ -5,8 +5,6 @@
 
 #include <qtstreamdeck/qstreamdeckaction.h>
 
-#include "voice_state.h"
-
 class Plugin;
 class Button;
 

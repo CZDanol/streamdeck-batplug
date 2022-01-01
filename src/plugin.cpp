@@ -31,10 +31,6 @@ bool Plugin::init(const ESDConfig &esdConfig) {
 			if(auto btn = devices_[action.deviceId]->buttons.value(action.context))
 				btn->onPressed();
 		});
-		connect(&deck, &QStreamDeckPlugin::keyUp, this, [this](const QStreamDeckAction &action) {
-			if(auto btn = devices_[action.deviceId]->buttons.value(action.context))
-				btn->onReleased();
-		});
 	}
 
 	return true;
