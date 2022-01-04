@@ -36,14 +36,20 @@ void Plugin::onKeyDown(const QStreamDeckAction &a) {
 		}
 	}
 
-	// Set arguments
+	// Set arguments & environment
 	{
+		QProcessEnvironment env = p->processEnvironment();
 		QStringList args;
+
 		const QJsonObject settings = a.payload["settings"].toObject();
-		for(auto it = settings.begin(), end = settings.end(); it != end; it++)
-			args << ("--" + it.key()) << it.value().toString();
+		for(auto it = settings.begin(), end = settings.end(); it != end; it++) {
+			const QString val = it.value().toString();
+			args << ("--" + it.key()) << val;
+			env.insert("BPS_" + it.key(), val);
+		}
 
 		p->setArguments(args);
+		p->setProcessEnvironment(env);
 	}
 
 	QObject::connect(p, &QProcess::finished, p, &QProcess::deleteLater);

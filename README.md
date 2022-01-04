@@ -39,6 +39,9 @@ Shows an alert icon over the button.
 
 ## Action settings
 * The plugin core passes all action settings as `--key value` argument pairs into the launched application.
+* Additionally, the settings are also passed as environment variables prefixed with `BPS_`.
+
+So for example if an action has a setting `errorMessage: "This is an error!"`, it is passed to the program as `-errorMessage "This is an error"` and the environment variable `BPS_errorMessage` has the value of the setting stored.
 
 ## Authors
 * Idea by Krabs
