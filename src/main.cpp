@@ -6,8 +6,12 @@
 
 void messageLogger(QtMsgType t, const QMessageLogContext &, const QString &msg) {
 	static QFile f("log.txt");
-	if(!f.isOpen())
+	if(!f.isOpen()) {
+		if(!f.exists())
+			return;
+
 		f.open(QIODevice::WriteOnly);
+	}
 
 	f.write(msg.toUtf8());
 	f.write("\n");

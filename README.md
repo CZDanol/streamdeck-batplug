@@ -16,6 +16,8 @@ Additionally, it provides a few basic commands that can be executed from the lau
 5. Release the plugin, don't forget to put Danol and Krabs into the credits!
 6. Profit.
 
+The program writes to `log.txt` in the `bin` folder for debugging purposes. If the `log.txt` file doesn't exist, the logging is disabled. 
+
 ## Supported commands
 The plugin core reads `stdout` of the launched commands and reads commands from that.
 * A command always starts on a new line, trailing and leading withespaces are trimmed.
