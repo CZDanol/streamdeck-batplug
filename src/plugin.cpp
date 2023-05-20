@@ -38,7 +38,7 @@ void Plugin::onKeyDown(const QStreamDeckAction &a) {
 
 	// Set arguments & environment
 	{
-		QProcessEnvironment env = p->processEnvironment();
+		QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
 		QStringList args;
 
 		const QJsonObject settings = a.payload["settings"].toObject();
