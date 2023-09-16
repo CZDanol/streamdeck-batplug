@@ -10,16 +10,17 @@ bool Plugin::init(const ESDConfig &esdConfig) {
 		return false;
 
 	connect(&deck, &QStreamDeckPlugin::keyDown, this, &Plugin::onKeyDown);
+	connect(&deck, &QStreamDeckPlugin::willAppear, this, &Plugin::onWillAppear);
 
 	return true;
 }
 
-void Plugin::onKeyDown(const QStreamDeckAction &a) {
+void Plugin::launchScript(const QStreamDeckAction &a, const QString &scriptSuffix) {
 	QProcess *p = new QProcess(this);
 
 	// Find launchable
 	{
-		const QString base = QDir(QCoreApplication::applicationDirPath()).absoluteFilePath("../cmd/" + a.action);
+		const QString base = QDir(QCoreApplication::applicationDirPath()).absoluteFilePath("../cmd/" + a.action + scriptSuffix);
 		QString program;
 
 		static const QStringList suffixes{".exe", ".bat", ""};
@@ -84,4 +85,12 @@ void Plugin::onKeyDown(const QStreamDeckAction &a) {
 
 	qDebug() << "run" << p->program() << p->arguments();
 	p->start();
+}
+
+void Plugin::onKeyDown(const QStreamDeckAction &a) {
+	launchScript(a, "");
+}
+
+void Plugin::onWillAppear(const QStreamDeckAction &a) {
+	launchScript(a, "_willAppear");
 }

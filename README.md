@@ -45,6 +45,10 @@ Shows an alert icon over the button.
 
 So for example if an action has a setting `errorMessage: "This is an error!"`, it is passed to the program as `-errorMessage "This is an error"` and the environment variable `BPS_errorMessage` has the value of the setting stored.
 
+## Different events
+* `action.XXX` – The script corresponding with the action name is called when a Stream Deck button is pressed.
+* `action_willAppear.XXX` – This script is called on the `willAppear` Stream Deck event
+
 ## Authors
 * Idea by Krabs
 * Coded by Danol

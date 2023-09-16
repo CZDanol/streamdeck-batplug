@@ -18,9 +18,11 @@ class Plugin : public QObject {
 
 public:
 	bool init(const ESDConfig &esdConfig);
+	void launchScript(const QStreamDeckAction &a, const QString &scriptSuffix);
 
 public slots:
 	void onKeyDown(const QStreamDeckAction &a);
+	void onWillAppear(const QStreamDeckAction &a);
 
 public:
 	QStreamDeckPlugin deck;
